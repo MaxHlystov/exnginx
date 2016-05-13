@@ -1,0 +1,13 @@
+mkdir /home/box/web
+cd /home/box/web
+
+git clone https://github.com/MaxHlystov/exnginx.git /home/box/web
+
+sudo bash
+apt-get update
+apt-get install nginx
+
+
+gunicorn -b 0.0.0.0:8080 hello:app &
+
+curl http://0.0.0.0:8080?orange=5&apple=8&tyt=sdf
