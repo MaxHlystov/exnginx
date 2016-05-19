@@ -4,7 +4,7 @@ apt-get install nginx
 pip install -U Django
 
 ln -sf /home/box/web/etc/nginx.conf /etc/nginx/nginx.conf
-/etc/init.d/nginx start
+/etc/init.d/nginx -s start
 
 cd /home/box/web
 
