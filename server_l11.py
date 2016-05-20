@@ -113,10 +113,6 @@ class TestAnswer(unittest.TestCase):
         except:
             assert False, "Failed to create answer model, check db connection"
 
-def start_test(test_class):
-    suite = unittest.TestLoader().loadTestsFromTestCase(test_class)
-    unittest.TextTestRunner(verbosity=0).run(suite)
 
-if __name__ == '__main__':
-    start_test(globals().get(sys.argv[1]))
-
+suite = unittest.TestLoader().loadTestsFromTestCase(globals().get(sys.argv[1]))
+unittest.TextTestRunner(verbosity=0).run(suite)
