@@ -9,9 +9,17 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
+class QuestionManager(models.Manager):
+    def new():
+        pass
+
+    def popular():
+        pass
+
+
 class Question(models.Model):
     """Вопрос"""
-    
+
     objects = QuestionManager()
     title = models.CharField(max_length=200) # заголовок вопроса
     text = models.TextField() # полный текст вопроса
@@ -26,13 +34,6 @@ class Question(models.Model):
 
     def was_published_recently(self):
         return self.added_at >= timezone.now() - datetime.timedelta(days=1)
-
-class QuestionManager(models.Manager):
-    def new():
-        pass
-
-    def popular():
-        pass
 
 
 class Answer(models.Model):
