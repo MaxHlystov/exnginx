@@ -23,7 +23,7 @@ class Question(models.Model):
     objects = QuestionManager()
     title = models.CharField(max_length=200) # заголовок вопроса
     text = models.TextField() # полный текст вопроса
-    added_at = models.DateTimeField('date added') # дата добавления вопроса
+    added_at = models.DateTimeField('date added',auto_now_add=True) # дата добавления вопроса
     rating = models.IntegerField(default=0) # рейтинг вопроса (число)
     author = models.ForeignKey(User, on_delete=models.CASCADE) # автор вопроса
     # список пользователей, поставивших "лайк"
@@ -40,7 +40,7 @@ class Answer(models.Model):
     """ответ"""
 
     text = models.TextField() # текст ответа
-    added_at = models.DateTimeField() # дата добавления ответа
+    added_at = models.DateTimeField(auto_now_add=True) # дата добавления ответа
     # вопрос, к которому относится ответ
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE) # автор ответа
