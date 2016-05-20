@@ -1,6 +1,6 @@
 #!/bin/bash
-apt-get update
-apt-get install nginx
+apt-get update -y
+apt-get install nginx -y
 pip install -U Django
 
 ln -sf /home/box/web/etc/nginx.conf /etc/nginx/nginx.conf
@@ -19,9 +19,9 @@ sudo mysql -uroot -e "GRANT ALL PRIVILEGES ON stepic_web.* TO 'box'@'localhost' 
 sudo mysql -uroot -e "FLUSH PRIVILEGES;"
 
 # установить поддержку mysql в python
-sudo apt-get install python-dev libmysqlclient-dev
+sudo apt-get install python-dev libmysqlclient-dev -y
 sudo pip install pip --upgrade
-sudo apt-get build-dep python-mysqldb
+sudo apt-get build-dep python-mysqldb -y
 sudo pip install MySQL-python
 
 # создать миграцию
@@ -33,6 +33,6 @@ python manage.py makemigrations qa
 python manage.py migrate
 
 # запустить Django через сервер gunicorn
-cd ask
-gunicorn -b 0.0.0.0:8000 ask.wsgi &
+#cd ask
+#gunicorn -b 0.0.0.0:8000 ask.wsgi &
 
