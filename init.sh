@@ -1,7 +1,7 @@
 #!/bin/bash
 apt-get update -y
 apt-get install nginx -y
-pip install -U Django
+#pip install -U Django
 
 ln -sf /home/box/web/etc/nginx.conf /etc/nginx/nginx.conf
 /etc/init.d/nginx -s start
@@ -19,10 +19,10 @@ sudo mysql -uroot -e "GRANT ALL PRIVILEGES ON stepic_web.* TO 'box'@'localhost' 
 sudo mysql -uroot -e "FLUSH PRIVILEGES;"
 
 # установить поддержку mysql в python
-sudo apt-get install python-dev libmysqlclient-dev -y
-sudo pip install pip --upgrade
-sudo apt-get build-dep python-mysqldb -y
-sudo pip install MySQL-python
+#sudo apt-get install python-dev libmysqlclient-dev -y
+#sudo pip install pip --upgrade
+#sudo apt-get build-dep python-mysqldb -y
+#sudo pip install MySQL-python
 
 # создать миграцию
 cd /home/box/web/ask
