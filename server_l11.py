@@ -54,13 +54,13 @@ class TestQuestion(unittest.TestCase):
         except FieldDoesNotExist:
             assert False, "author field does not exist in Question model"
         assert isinstance(author, ForeignKey), "author field is not ForeignKey"
-        assert author.related.parent_model == User, "author field does not refer User model"
+        assert author.related_model == User, "author field does not refer User model"
         try:
             likes = Question._meta.get_field('likes')
         except FieldDoesNotExist:
             assert False, "likes field does not exist in Question model"
         assert isinstance(likes, ManyToManyField), "likes field is not ManyToManyField"
-        assert likes.related.parent_model == User, "likes field does not refer User model"
+        assert likes.related_model == User, "likes field does not refer User model"
         user, _ = User.objects.get_or_create(username='x', password='y')
         try:
             question = Question(title='qwe', text='qwe', author=user)
@@ -93,7 +93,7 @@ class TestAnswer(unittest.TestCase):
         except FieldDoesNotExist:
             assert False, "question field does not exist in Answer model"
         assert isinstance(question, ForeignKey), "question field is not ForeignKey"
-        assert question.related.parent_model == Question, "question field does not refer Question model"
+        assert question.related_model == Question, "question field does not refer Question model"
         try:
             added_at = Answer._meta.get_field('added_at')
         except FieldDoesNotExist:
@@ -104,7 +104,7 @@ class TestAnswer(unittest.TestCase):
         except FieldDoesNotExist:
             assert False, "author field does not exist in Answer model"
         assert isinstance(author, ForeignKey), "author field is not ForeignKey"
-        assert author.related.parent_model == User, "author field does not refer User model"
+        assert author.related_model == User, "author field does not refer User model"
         user, _ = User.objects.get_or_create(username='x', password='y')
         question = Question.objects.create(title='qwe', text='qwe', author=user)
         try:
