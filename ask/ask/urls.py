@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """ask URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -19,12 +21,12 @@ from qa import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.test),
-    url(r'^signup/', views.test),
-    url(r'^login/', views.test),
-    url(r'^question/(?P<num>[0-9]+)/$', views.test),
-    url(r'^ask/', views.test),
-    url(r'^popular/', views.test),
-    url(r'^new/', views.test),
+    url(r'^$', views.new_questions, name='main'),
+    url(r'^signup/', views.test, name='signup'),
+    url(r'^login/', views.test, name='login'),
+    url(r'^question/(?P<question_id>[0-9]+)/$', views.question, name='question'),
+    url(r'^ask/', views.test, name='ask'),
+    url(r'^popular/', views.popular_questions, name='popular_questions'),
+    url(r'^new/', views.new_questions, name='new_questions'),
 ]
 

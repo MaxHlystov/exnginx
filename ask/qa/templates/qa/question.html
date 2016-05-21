@@ -1,0 +1,8 @@
+<h1>{{ question.title | truncatechars:80 }}</h1>
+<p>{{ question.text }}</p>
+<ul>
+{% for answer in question.answer_set.all %}
+    <li>{{ answer.text }}</li>
+{% endfor %}
+</ul>
+

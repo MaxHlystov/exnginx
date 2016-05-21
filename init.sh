@@ -10,7 +10,7 @@ ln -sf /home/box/web/etc/nginx.conf /etc/nginx/nginx.conf
 /etc/init.d/mysql start
 
 #cd /home/box/web
-#gunicorn -b 0.0.0.0:8080 /home/box/web/hello:app &
+#gunicorn -b 0.0.0.0:8080 hello:app &
 
 # создать базу. установить для нее все права для пользователя box
 sudo mysql -uroot -e "CREATE DATABASE stepic_web CHARACTER SET UTF8;"

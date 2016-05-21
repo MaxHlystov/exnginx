@@ -20,7 +20,7 @@ class QuestionManager(models.Manager):
 class Question(models.Model):
     """Вопрос"""
 
-    objects = QuestionManager()
+    #objects = QuestionManager()
     title = models.CharField(max_length=200) # заголовок вопроса
     text = models.TextField() # полный текст вопроса
     added_at = models.DateTimeField('date added',auto_now_add=True) # дата добавления вопроса
