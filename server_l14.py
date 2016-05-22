@@ -4,6 +4,9 @@ import sys
 sys.path.append('/home/box/web/ask')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'ask.settings'
 
+import django
+django.setup()
+
 from django import forms
 
 class TestImport(unittest.TestCase):
