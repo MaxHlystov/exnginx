@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.http import Http404
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from django.core.urlresolvers import reverse
 
 from qa.models import Question, Answer
@@ -69,7 +69,11 @@ def question(request, question_id):
     вопрос, без пагинации. В случае неправильного id вопроса view должна возвращать 404.
     """
     question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'qa/question.html', {'question': question})
+    form = AnswerForm() #initial={'question': question.id})
+    form.fields['question'].initial = question.id
+    return render(request, 'qa/question.html',
+            {'question': question,
+             'form': form})
 
 
 def ask(request):
@@ -88,10 +92,16 @@ def ask(request):
         form = AskForm()
     return render(request, 'qa/ask.html', {'form': form})
 
+
+@require_POST
 def answer(request):
     """ Страница добавления ответа.
     При POST запросе форма AnswerForm добавляет новый ответ
     и перенаправляет на страницу вопроса /question/123/
     """
-    return HttpResponse('OK')
-
+    form = AnswerForm(request.POST)
+    if form.is_valid():
+        answer = form.save()
+        url = reverse('question', args=(answer.question.id,))
+        return HttpResponseRedirect(url)
+    return render(request, 'qa/answer.html', {'form': form})

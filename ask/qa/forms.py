@@ -2,7 +2,8 @@
 
 from django.contrib.auth.models import User
 from django import forms
-from qa.models import Question
+from qa.models import Question, Answer
+from django.shortcuts import get_object_or_404
 
 
 class AskForm(forms.Form):
@@ -25,7 +26,8 @@ class AskForm(forms.Form):
 
 class AnswerForm(forms.Form):
     text = forms.CharField(label='Ответ', widget=forms.Textarea)
-    question = forms.IntegerField()
+    question = forms.IntegerField(widget=forms.HiddenInput )
+
     def clean(self):
         pass
 
@@ -33,6 +35,13 @@ class AnswerForm(forms.Form):
         pass
 
     def save(self):
-        pass
-
+        answer = Answer() #**self.cleaned_data)
+        answer.text = self.cleaned_data['text']
+        question_id = self.cleaned_data['question']
+        answer.question = get_object_or_404(Question, pk=question_id)
+        # здесь нужно поправить. устанавливать пользователя из session.user
+        user, _ = User.objects.get_or_create(username='Max', password='111111') 
+        answer.author = user
+        answer.save()
+        return answer
 
