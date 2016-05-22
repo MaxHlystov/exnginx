@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
-from qa.models import Question, Answer
 from django.http import Http404
 from django.views.decorators.http import require_GET
+from django.core.urlresolvers import reverse
 
-
-def test(request, *args, **kwargs):
-    return HttpResponse('OK')
+from qa.models import Question, Answer
+from qa.forms import AskForm, AnswerForm
 
 
 def paginate(request, qs):
@@ -32,6 +31,12 @@ def paginate(request, qs):
     return page
 
 
+@require_GET
+def test(request, *args, **kwargs):
+    return HttpResponse('OK')
+
+
+@require_GET
 def new_questions(request):
     """ Страница с новыми вопросами.
     Главная страница. Список "новых" вопросов. Т.е. последний заданный вопрос - первый в списке.
@@ -44,6 +49,7 @@ def new_questions(request):
     return render(request, 'qa/questions.html', {'page': page})
 
 
+@require_GET
 def popular_questions(request):
     """ Страница с популярными вопросами.
     Cписок "популярных" вопросов. Сортировка по убыванию поля rating. На этой странице должна
@@ -64,4 +70,28 @@ def question(request, question_id):
     """
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'qa/question.html', {'question': question})
-            
+
+
+def ask(request):
+    """ Страница добавления вопроса.
+    При GET запросе - отображается форма AskForm,
+    при POST запросе форма должна создавать новый вопрос
+    и перенаправлять на страницу вопроса - /question/123/
+    """
+    if request.method == 'POST':
+        form = AskForm(request.POST)
+        if form.is_valid():
+            q = form.save()
+            url = reverse('question', args=(q.id,))
+            return HttpResponseRedirect(url)
+    else:
+        form = AskForm()
+    return render(request, 'qa/ask.html', {'form': form})
+
+def answer(request):
+    """ Страница добавления ответа.
+    При POST запросе форма AnswerForm добавляет новый ответ
+    и перенаправляет на страницу вопроса /question/123/
+    """
+    return HttpResponse('OK')
+
