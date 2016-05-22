@@ -62,12 +62,12 @@ def popular_questions(request):
     return render(request, 'qa/questions.html', {'page': page})
 
 
-@require_GET
 def question(request, question_id):
     """ Страница одного вопроса.
     На этой странице должны выводится заголовок (title), текст (text) вопроса и все ответы на данный
     вопрос, без пагинации. В случае неправильного id вопроса view должна возвращать 404.
     """
+    #if request.method == 'GET':
     question = get_object_or_404(Question, pk=question_id)
     form = AnswerForm() #initial={'question': question.id})
     form.fields['question'].initial = question.id
