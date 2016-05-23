@@ -17,13 +17,17 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.auth.views import login, logout
 from qa import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.new_questions, name='main'),
-    url(r'^signup/', views.test, name='signup'),
-    url(r'^login/', views.test, name='login'),
+    url(r'^signup/', views.SignUp.as_view(), name='signup'),
+    url(r'^logout/', logout),
+    url(r'^login/', login,
+        {'template_name': 'qa/login.html'},
+        name='login'),
     url(r'^question/(?P<question_id>[0-9]+)/$', views.question, name='question'),
     url(r'^ask/', views.ask, name='ask'),
     url(r'^answer/', views.answer, name='answer'),

@@ -2,6 +2,8 @@
 
 from django.contrib.auth.models import User
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+
 from qa.models import Question, Answer
 from django.shortcuts import get_object_or_404
 
@@ -16,9 +18,9 @@ class AskForm(forms.Form):
     def clean_message(self):
         pass
 
-    def save(self):
+    def save(self, user):
         q = Question(**self.cleaned_data)
-        user, _ = User.objects.get_or_create(username='Max', password='111111') 
+        #user, _ = User.objects.get_or_create(username='Max', password='111111')
         q.author = user
         q.save()
         return q
@@ -34,14 +36,29 @@ class AnswerForm(forms.Form):
     def clean_message(self):
         pass
 
-    def save(self):
+    def save(self, user):
         answer = Answer() #**self.cleaned_data)
         answer.text = self.cleaned_data['text']
         question_id = self.cleaned_data['question']
         answer.question = get_object_or_404(Question, pk=question_id)
         # здесь нужно поправить. устанавливать пользователя из session.user
-        user, _ = User.objects.get_or_create(username='Max', password='111111') 
+        #user, _ = User.objects.get_or_create(username='Max', password='111111')
         answer.author = user
         answer.save()
         return answer
+
+class UserCreateForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super(UserCreateForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
+
 

@@ -1,9 +1,11 @@
 <h1>{{ question.title | truncatechars:80 }}</h1>
+<a href="{% url 'main' %}">На главную</a><br />
+
 <p>{{ question.text }}</p>
 {% include "qa/answer.html" %}
 <ul>
 {% for answer in question.answer_set.all %}
-    <li>{{ answer.text }}</li>
+<li>{{ answer.text }} ({{ answer.author.username }})</li>
 {% endfor %}
 </ul>
 

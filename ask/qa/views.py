@@ -5,10 +5,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.views.decorators.http import require_GET, require_POST
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.views.generic.edit import FormView
+from django.contrib.auth.forms import UserCreationForm
 
-from qa.models import Question, Answer
-from qa.forms import AskForm, AnswerForm
+from qa.models import Question, Answer, User
+from qa.forms import AskForm, AnswerForm, UserCreateForm
 
 
 def paginate(request, qs):
@@ -76,6 +79,7 @@ def question(request, question_id):
              'form': form})
 
 
+@login_required()
 def ask(request):
     """ Страница добавления вопроса.
     При GET запросе - отображается форма AskForm,
@@ -84,8 +88,9 @@ def ask(request):
     """
     if request.method == 'POST':
         form = AskForm(request.POST)
+        form._user = request.user
         if form.is_valid():
-            q = form.save()
+            q = form.save(request.user)
             url = reverse('question', args=(q.id,))
             return HttpResponseRedirect(url)
     else:
@@ -93,6 +98,7 @@ def ask(request):
     return render(request, 'qa/ask.html', {'form': form})
 
 
+@login_required()
 @require_POST
 def answer(request):
     """ Страница добавления ответа.
@@ -101,7 +107,18 @@ def answer(request):
     """
     form = AnswerForm(request.POST)
     if form.is_valid():
-        answer = form.save()
+        answer = form.save(request.user)
         url = reverse('question', args=(answer.question.id,))
         return HttpResponseRedirect(url)
     return render(request, 'qa/answer.html', {'form': form})
+
+
+class SignUp(FormView):
+    form_class = UserCreateForm
+    success_url = '/login/'
+    template_name = 'qa/signup.html'
+    
+    def form_valid(self, form):
+        form.save()
+        return super(SignUp, self).form_valid(form)
+

@@ -1,5 +1,7 @@
+<a href="{% url 'ask' %}">Добавить свой вопрос</a><br />
+
 {% for question in page %}
-    <a href="{% url 'question' question.id %}">{{ question.title }}</a><br>
+<a href="{% url 'question' question.id %}">{{ question.title }} ({{ question.author.username }})</a><br>
 {% endfor %}
 
 <div class="pagination">
