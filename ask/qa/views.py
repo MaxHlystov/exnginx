@@ -81,7 +81,7 @@ def question(request, question_id):
              'form': form})
 
 
-@login_required()
+#@login_required()
 def ask(request):
     """ Страница добавления вопроса.
     При GET запросе - отображается форма AskForm,
@@ -89,12 +89,13 @@ def ask(request):
     и перенаправлять на страницу вопроса - /question/123/
     """
     if request.method == 'POST':
-        form = AskForm(request.POST)
-        form._user = request.user
-        if form.is_valid():
-            q = form.save(request.user)
-            url = reverse('question', args=(q.id,))
-            return HttpResponseRedirect(url)
+        if request.user.is_authenticated():
+            form = AskForm(request.POST)
+            form._user = request.user
+            if form.is_valid():
+                q = form.save(request.user)
+                url = reverse('question', args=(q.id,))
+                return HttpResponseRedirect(url)
     else:
         form = AskForm()
     return render(request, 'qa/ask.html', {'form': form})
