@@ -81,7 +81,7 @@ def question(request, question_id):
              'form': form})
 
 
-#@login_required()
+@login_required()
 def ask(request):
     """ Страница добавления вопроса.
     При GET запросе - отображается форма AskForm,
