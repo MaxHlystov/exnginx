@@ -23,7 +23,7 @@ from qa import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.new_questions, name='main'),
-    url(r'^signup/', views.SignUp.as_view(), name='signup'),
+    url(r'^signup/', views.signup, name='signup'),
     url(r'^logout/', logout),
     url(r'^login/', login,
         {'template_name': 'qa/login.html'},

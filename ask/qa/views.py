@@ -6,6 +6,8 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
+from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import UserCreationForm
@@ -113,12 +115,23 @@ def answer(request):
     return render(request, 'qa/answer.html', {'form': form})
 
 
-class SignUp(FormView):
-    form_class = UserCreateForm
-    success_url = '/login/'
-    template_name = 'qa/signup.html'
-    
-    def form_valid(self, form):
-        form.save()
-        return super(SignUp, self).form_valid(form)
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreateForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user = authenticate(username=form.cleaned_data['username'],
+                    password=form.cleaned_data['password'])
+            if user is not None:
+                login(request, user)
+                url = reverse('main')
+            else:
+                url = reverse('login')
+            return HttpResponseRedirect(url)
+    else:
+        form = UserCreateForm()
+    return render(request, 'qa/signup.html', {'form': form})
+
+
+
 

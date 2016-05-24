@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib.auth.models import User
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 from qa.models import Question, Answer
 from django.shortcuts import get_object_or_404
@@ -47,18 +46,29 @@ class AnswerForm(forms.Form):
         answer.save()
         return answer
 
-class UserCreateForm(UserCreationForm):
-    email = forms.EmailField(required=True)
 
-    class Meta:
-        model = User
-        fields = ("username", "email", "password")
+class UserCreateForm(forms.Form):
+    username = forms.CharField(required=True, widget=forms.TextInput)
+    email = forms.EmailField(required=True, widget=forms.EmailInput)
+    password = forms.CharField(required=True, widget=forms.PasswordInput)
 
-    def save(self, commit=True):
-        user = super(UserCreateForm, self).save(commit=False)
-        user.email = self.cleaned_data["email"]
-        if commit:
-            user.save()
+    def clean(self):
+        pass
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        try:
+            u = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return username
+        raise forms.ValidationError('User has been registered!',
+                code='BadUserName')
+
+    def save(self):
+        user = User.objects.create_user(self.cleaned_data["username"],
+                self.cleaned_data["email"],
+                self.cleaned_data["password"])
+        user.save()
         return user
 
 
