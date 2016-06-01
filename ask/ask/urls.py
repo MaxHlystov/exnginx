@@ -33,5 +33,6 @@ urlpatterns = [
     url(r'^answer/', views.answer, name='answer'),
     url(r'^popular/', views.popular_questions, name='popular_questions'),
     url(r'^new/', views.new_questions, name='new_questions'),
+    url(r'^comments/(?P<answer_id>)/$', views.ajax_answers, name='ajax_answers'),
 ]
 

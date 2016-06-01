@@ -133,6 +133,13 @@ def signup(request):
         form = UserCreateForm()
     return render(request, 'qa/signup.html', {'form': form})
 
+def ajax_answers(request):
+    #if request.method == 'GET':
+    answers = Answer.objects.filter(pk__gt=answer_id)
+    answers.order_by('-id')
+    return render(request, 'qa/ajax_answers.html',
+            {'answers': answers})
+
 
 
 
