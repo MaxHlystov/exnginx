@@ -32,7 +32,8 @@ class Question(models.Model):
         return self.title
 
     def was_published_recently(self):
-        return self.added_at >= timezone.now() - datetime.timedelta(days=1)
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.added_at <= now
 
 
 class Answer(models.Model):
